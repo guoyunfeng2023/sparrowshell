@@ -1,76 +1,76 @@
 # SparrowShell
 
-**中文 · [English](README.en.md)**
+**English · [中文](README.zh-CN.md)**
 
-**[下载最新版本](https://github.com/guoyunfeng2023/sparrowshell/releases/latest)** · macOS（Apple Silicon）／Windows 10／11 x64
+**[Download the latest release](https://github.com/guoyunfeng2023/sparrowshell/releases/latest)** · macOS (Apple Silicon) / Windows 10/11 x64
 
-SparrowShell 是一款本地优先、支持 AI 辅助运维的服务器管理工具，将 SSH 终端、远程文件管理、服务器监控和批量操作整合在同一个工作台中，支持 macOS 与 Windows。
+SparrowShell is a local-first server management tool with AI-assisted operations. It brings an SSH terminal, remote file management, server monitoring, and batch operations into one workspace, with support for macOS and Windows.
 
-无需注册即可管理服务器。服务器密码和私钥口令仅保存在本机，不参与云同步；AI 生成的命令通过本地执行策略运行，支持逐条确认、高危命令确认和完全自动执行三种模式。
+You can manage servers without creating an account. Server passwords and private-key passphrases remain on the local device and are never synchronized to the cloud. AI-generated commands run through a local execution policy with three modes: confirm every command, confirm high-risk commands only, or run all commands automatically.
 
-![SparrowShell 中文工作台](docs/screenshots/workbench-zh.png)
+![SparrowShell English workbench](docs/screenshots/workbench-en.png)
 
-## 核心功能
+## Features
 
-- **服务器连接管理**：使用文件夹和子文件夹整理服务器，支持密码、私钥和跳板机连接。
-- **SSH 终端**：支持多标签终端、历史命令、命令提示、常用命令补全和批量执行。
-- **远程文件管理**：浏览、上传、下载、重命名、移动和解压远程文件，支持文本编辑、语法高亮及搜索替换。
-- **服务器监控**：查看系统信息、CPU、内存、磁盘和进程，支持经确认后终止指定进程。
-- **AI 运维助手**：通过自然语言生成命令、查看实际执行结果并继续分析，支持本地上下文权限控制。
-- **批量与自动化**：支持多服务器批量操作和自动化工作流定义。
-- **本地优先与可选云同步**：不登录也能使用；登录后可在不同设备之间同步服务器配置，秘密信息不同步。
-- **个性化设置**：支持深色／浅色主题、终端字体设置和中英文界面。
+- **Server connection management**: Organize servers into nested folders and connect using passwords, private keys, or jump hosts.
+- **SSH terminal**: Use multiple terminal tabs, command history, command suggestions, common command completion, and batch execution.
+- **Remote file management**: Browse, upload, download, rename, move, and extract remote files, with text editing, syntax highlighting, and search and replace.
+- **Server monitoring**: Inspect system information, CPU, memory, disks, and processes, with explicit confirmation before terminating a process.
+- **AI operations assistant**: Generate commands from natural language, inspect actual execution results, continue analysis, and control which local context categories may be shared.
+- **Batch operations and automation**: Run operations across multiple servers and define automated workflows.
+- **Local first with optional cloud sync**: Use the app without signing in, or synchronize server configurations across devices after signing in. Secrets are never synchronized.
+- **Personalization**: Choose dark or light themes, configure terminal fonts, and switch between Chinese and English interfaces.
 
-> **安全提示：**“自动执行所有命令”不会要求额外确认，也可能直接执行删除、停机等高危操作。请仅在可信服务器和明确授权的环境中使用。
+> **Safety warning:** “Run all commands automatically” does not ask for additional confirmation and may execute destructive or high-risk operations, including deletion or shutdown. Use it only on trusted servers and in environments where you have explicit authorization.
 
-## 仓库结构
+## Repository layout
 
 ```text
 sparrowshell/
 ├── apps/
 │   ├── desktop/
-│   │   ├── mac/             # macOS 客户端及独立 Rust 工作区
-│   │   └── windows/         # Windows 客户端及独立 Rust 工作区
-│   └── admin/               # 可选的 Web 管理端
+│   │   ├── mac/             # macOS client and standalone Rust workspace
+│   │   └── windows/         # Windows client and standalone Rust workspace
+│   └── admin/               # Optional web admin console
 ├── services/
-│   └── sparrowshell-ai/     # 两端共用的 Java 后台服务
+│   └── sparrowshell-ai/     # Shared Java backend for both clients
 ├── deploy/
-│   ├── mysql/init.sql       # 全新数据库的一键初始化脚本
-│   └── docker/              # Docker 构建和部署示例
-├── tests/openssh/           # 隔离的 OpenSSH 集成测试环境
-├── docs/                    # 构建、平台适配文档和界面截图
-└── SECURITY.md              # 安全问题反馈说明
+│   ├── mysql/init.sql       # One-shot initialization for a new database
+│   └── docker/              # Docker build and deployment examples
+├── tests/openssh/           # Isolated OpenSSH integration environment
+├── docs/                    # Build guides, platform documentation, and screenshots
+└── SECURITY.md              # Security reporting guidelines
 ```
 
-## 技术栈
+## Technology stack
 
-- **客户端**：Tauri 2、Rust、React、TypeScript、Vite、xterm.js、CodeMirror、SQLite。
-- **后台服务**：Java 8、Spring Boot 2.7、JDBC、MySQL 5.7。
-- **管理端**：React、Vite、Nginx。
-- **可选集成**：通义千问、DeepSeek、SMTP／腾讯云 SES、支付宝。
+- **Clients**: Tauri 2, Rust, React, TypeScript, Vite, xterm.js, CodeMirror, and SQLite.
+- **Backend**: Java 8, Spring Boot 2.7, JDBC, and MySQL 5.7.
+- **Admin console**: React, Vite, and Nginx.
+- **Optional integrations**: Qwen, DeepSeek, SMTP / Tencent Cloud SES, and Alipay.
 
-## 两种使用方式
+## Two ways to use SparrowShell
 
-### 1. 客户端与 AI 基础服务
+### 1. Client with the basic AI service
 
-只部署客户端和后台基础服务，配置自己的模型密钥即可使用 AI。无需启动管理端，也无需启用支付、邮件、账号和数据库平台能力。
+Deploy only the client and basic backend, then configure your own model credentials to use AI. You do not need the admin console, payments, email, accounts, or database-backed platform capabilities.
 
-### 2. 完整自托管平台
+### 2. Complete self-hosted platform
 
-在基础服务之上配置 MySQL，并按需启用账号、云同步、反馈、版本更新、邮件和管理端。支付与订阅是独立可选能力，不需要收费时保持关闭。
+Add MySQL to the basic service and enable accounts, cloud sync, feedback, version updates, email, and the admin console as needed. Payments and subscriptions are independently optional; keep them disabled if you do not charge users.
 
-## 快速开始
+## Quick start
 
-### 环境要求
+### Requirements
 
-- Node.js 20 或更高版本；
-- Rust stable，由 `rust-toolchain.toml` 管理；
-- Java 8 和 Maven 3.8 或更高版本；
-- 完整平台需要 MySQL 5.7；
-- macOS 构建需要 Xcode Command Line Tools；
-- Windows 构建需要 Visual Studio C++ Build Tools、WebView2，以及 Rust 依赖构建所需的 NASM。
+- Node.js 20 or later;
+- Rust stable, managed through `rust-toolchain.toml`;
+- Java 8 and Maven 3.8 or later;
+- MySQL 5.7 for the complete platform;
+- Xcode Command Line Tools for macOS builds;
+- Visual Studio C++ Build Tools, WebView2, and the NASM required by Rust dependencies for Windows builds.
 
-### 启动 macOS 客户端
+### Run the macOS client
 
 ```bash
 cd apps/desktop/mac
@@ -78,9 +78,9 @@ npm ci
 npm run tauri dev
 ```
 
-### 启动 Windows 客户端
+### Run the Windows client
 
-在 Windows 10／11 x64 的 PowerShell 中执行：
+Run the following in PowerShell on Windows 10/11 x64:
 
 ```powershell
 cd apps/desktop/windows
@@ -88,23 +88,23 @@ npm ci
 npm run tauri dev
 ```
 
-Windows 的 DPAPI、本机菜单、更新目标和 NSIS 配置已完成代码适配；原生编译、安装和运行仍应在 Windows 环境中验收。完整说明见 `docs/Windows开源客户端适配与构建指南.md`。
+The Windows source includes DPAPI, native menu, update target, and NSIS adaptations. Native compilation, installation, and runtime behavior should still be validated on Windows. See `docs/Windows开源客户端适配与构建指南.md` for the complete guide.
 
-### 仅启动 Web 界面
+### Run only the web interface
 
 ```bash
 cd apps/desktop/mac
 npm run dev
 ```
 
-Web 预览不能替代原生客户端验证，SSH、SFTP 和系统存储等功能需要通过 Tauri 运行。
+The web preview does not replace native client validation. SSH, SFTP, and operating-system credential storage require Tauri.
 
-## 配置客户端后台地址
+## Configure the client backend URL
 
-AI、账号、云同步、额度、版本更新和问题反馈共用同一个后台地址。每个客户端独立配置，直接修改对应工程根目录的文件：
+AI, accounts, cloud sync, usage quotas, version updates, and feedback share one backend URL. Configure each client independently by editing the file in its project root:
 
-- macOS：`apps/desktop/mac/config.example.json`
-- Windows：`apps/desktop/windows/config.example.json`
+- macOS: `apps/desktop/mac/config.example.json`
+- Windows: `apps/desktop/windows/config.example.json`
 
 ```json
 {
@@ -112,55 +112,55 @@ AI、账号、云同步、额度、版本更新和问题反馈共用同一个后
 }
 ```
 
-**不需要复制或重命名配置文件。** 这份配置会在编译时嵌入应用，开发模式和正式安装包使用同一个后台地址。修改后需要重新启动开发客户端或重新打包。
+**Do not copy or rename the configuration file.** It is embedded into the application at build time, so development and release builds use the same backend URL. Restart the development client or rebuild the application after changing it.
 
-本机后台可以使用 HTTP；非本机后台必须使用 HTTPS。不要在配置中写入模型密钥、服务器密码、登录令牌或支付私钥。客户端只连接已经启动的后台，不会自动启动后台进程。
+HTTP is allowed for a loopback backend; non-local backends must use HTTPS. Do not place model credentials, server passwords, login tokens, or payment secrets in this file. The client connects only to an already running backend and does not start the backend process itself.
 
-## 启动 AI 基础后台
+## Start the basic AI backend
 
-进入后台目录，复制通义千问配置示例：
+Go to the backend directory and copy the Qwen configuration example:
 
 ```bash
 cd services/sparrowshell-ai
 cp config/application.properties.example config/application.properties
 ```
 
-Windows PowerShell 可使用：
+In Windows PowerShell, use:
 
 ```powershell
 Copy-Item config/application.properties.example config/application.properties
 ```
 
-编辑 `services/sparrowshell-ai/config/application.properties`，填写自己的百炼 API-Key 和应用 ID：
+Edit `services/sparrowshell-ai/config/application.properties` and enter your own Bailian API key and application ID:
 
 ```properties
-sparrowshell.qwen.api-key=你的百炼API-Key
-sparrowshell.qwen.app-id=你的百炼应用ID
+sparrowshell.qwen.api-key=your-bailian-api-key
+sparrowshell.qwen.app-id=your-bailian-application-id
 sparrowshell.qwen.model=qwen3.8-flash
 ```
 
-其中，`api-key` 是阿里云百炼平台的 API-Key，`app-id` 是已创建百炼应用的应用 ID，不是模型名称。真实的 `application.properties` 已被 Git 忽略，不要提交到公开仓库。
+The `api-key` is the API key from Alibaba Cloud Bailian. The `app-id` is the ID of an application you have created in Bailian, not a model name. The real `application.properties` file is ignored by Git; do not commit it to a public repository.
 
-保存后直接启动后台，不需要设置环境变量：
+Save the file and start the backend directly. No environment variables are required for Qwen:
 
 ```bash
 mvn spring-boot:run
 ```
 
-后台默认监听 `http://127.0.0.1:8070`。动态 Agent 使用通义千问应用；DeepSeek 可用于相应的静态命令生成路由。没有配置模型时，客户端会明确提示后台模型未配置。
+The backend listens on `http://127.0.0.1:8070` by default. The dynamic agent uses a Qwen application; DeepSeek can be used by the corresponding static command-generation route. If no model is configured, the client reports that the backend model is unavailable.
 
-基础模式保持数据库、邮件、支付和平台持久化开关关闭即可。账号、云同步、版本管理、反馈持久化和管理端数据能力需要完整平台配置。
+Keep database, email, payment, and platform persistence features disabled in basic mode. Accounts, cloud sync, release management, persistent feedback, and admin data capabilities require the complete platform configuration.
 
-## 完整部署与管理端
+## Complete deployment and admin console
 
-全新部署执行一次 `deploy/mysql/init.sql` 即可创建数据库和全部数据表，不要在已有业务数据库上重复执行。后台启动时不会自动执行初始化 SQL。
+For a new deployment, run `deploy/mysql/init.sql` once to create the database and all tables. Do not run it again against an existing business database. The backend does not execute the initialization SQL automatically at startup.
 
-数据库、环境变量、管理员引导、Docker 镜像和容器启动说明见：
+For database settings, environment variables, administrator bootstrap, Docker images, and container startup, see:
 
 - `deploy/docker/README.md`
 - `deploy/docker/server/sparrowshell.env.example`
 
-管理端是可选组件，只有部署完整平台并需要图形化管理时才启动：
+The admin console is optional. Start it only when you deploy the complete platform and need graphical administration:
 
 ```bash
 cd apps/admin
@@ -168,11 +168,11 @@ npm ci
 npm run dev
 ```
 
-开发服务器将 `/v1` 代理到 `http://127.0.0.1:8070`。首次创建管理员需要临时启用后台管理员引导，具体步骤见 `deploy/docker/README.md`。管理端不包含固定演示账号，真实账号由部署者创建。
+The development server proxies `/v1` to `http://127.0.0.1:8070`. Creating the first administrator requires temporarily enabling the backend administrator bootstrap; see `deploy/docker/README.md`. The admin console contains no fixed demo account. Administrators are created by the person deploying the service.
 
-## 测试
+## Tests
 
-macOS 或 Windows 客户端均可在各自工程目录执行：
+Run the following in either the macOS or Windows client project:
 
 ```bash
 npm test
@@ -180,14 +180,14 @@ npm run build
 cargo test --workspace
 ```
 
-后台服务：
+Backend:
 
 ```bash
 cd services/sparrowshell-ai
 mvn test
 ```
 
-管理端浏览器测试使用模拟 API，不连接真实后台：
+Admin browser tests use mocked APIs and do not connect to a real backend:
 
 ```bash
 cd apps/admin
@@ -195,7 +195,7 @@ npx playwright install chromium
 npm run test:ui
 ```
 
-OpenSSH 集成测试使用 Docker，仅绑定本机回环地址。以下命令从 macOS 客户端工程目录执行：
+OpenSSH integration tests use Docker and bind only to the loopback interface. Run these commands from the macOS client project:
 
 ```bash
 cd apps/desktop/mac
@@ -204,52 +204,52 @@ cargo test -p sparrowshell-ssh-core --test openssh -- --ignored --nocapture
 docker compose -f ../../../tests/openssh/compose.yml down -v
 ```
 
-## 构建
+## Build
 
-macOS 客户端：
+macOS client:
 
 ```bash
 cd apps/desktop/mac
 npm run tauri build
 ```
 
-Windows x64 NSIS 安装包：
+Windows x64 NSIS installer:
 
 ```powershell
 cd apps/desktop/windows
 npm run tauri build -- --bundles nsis --target x86_64-pc-windows-msvc
 ```
 
-后台服务：
+Backend:
 
 ```bash
 cd services/sparrowshell-ai
 mvn clean package
 ```
 
-管理端：
+Admin console:
 
 ```bash
 cd apps/admin
 npm run build
 ```
 
-本仓库不包含个人或公司的签名身份。正式发布客户端时，请在自己的构建环境中配置代码签名；macOS 公证凭据和 Windows Authenticode 证书应保存在本机或 CI 密钥管理中，不要提交到仓库。
+This repository does not include personal or corporate signing identities. Configure code signing in your own build environment for public releases. Keep macOS notarization credentials and Windows Authenticode certificates on your local machine or in CI secret storage; never commit them to the repository.
 
-## 安全与隐私
+## Security and privacy
 
-- 通义千问密钥只填写在被 Git 忽略的后台本地配置文件中；数据库、邮箱、管理员、许可证和支付密钥通过部署环境配置。
-- 服务器密码、私钥口令和账号秘密不参与云同步。
-- 邮件、平台持久化、后台任务、管理员引导和真实支付默认关闭。
-- 不需要支付时保持 `SPARROWSHELL_PAYMENT_CHANNEL=disabled`。
-- 管理端代码开源不代表管理接口可以无保护地暴露到公网；生产环境应使用 HTTPS，并建议增加 IP 白名单或 VPN。
-- 请勿提交服务器密码、私钥、访问令牌、真实服务器配置、数据库导出或用户数据。
-- 安全问题请按照 `SECURITY.md` 私下反馈，不要在公开 Issue 中披露敏感细节。
+- Qwen credentials are stored only in the backend's Git-ignored local configuration file; database, email, administrator, license, and payment secrets are configured through the deployment environment.
+- Server passwords, private-key passphrases, and account secrets are never included in cloud synchronization.
+- Email, platform persistence, background jobs, administrator bootstrap, and real payments are disabled by default.
+- Keep `SPARROWSHELL_PAYMENT_CHANNEL=disabled` when payments are not needed.
+- Open-sourcing the admin console does not make it safe to expose management APIs without protection. Use HTTPS in production and consider an IP allowlist or VPN.
+- Never commit server passwords, private keys, access tokens, real server configurations, database exports, or user data.
+- Report security issues privately according to `SECURITY.md`; do not disclose sensitive details in public issues.
 
-## 联系作者
+## Contact the author
 
-如果你在使用、部署或二次开发中遇到问题，可以通过邮件联系作者：[362053214@qq.com](mailto:362053214@qq.com)。
+If you encounter a problem while using, deploying, or extending SparrowShell, contact the author by email: [362053214@qq.com](mailto:362053214@qq.com).
 
-## 许可证
+## License
 
-本项目采用 [MIT License](LICENSE)。
+This project is licensed under the [MIT License](LICENSE).
