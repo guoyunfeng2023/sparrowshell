@@ -2,6 +2,8 @@
 
 **中文 · [English](README.en.md)**
 
+**[下载最新版本](https://github.com/guoyunfeng2023/sparrowshell/releases/latest)** · macOS（Apple Silicon）／Windows 10／11 x64
+
 SparrowShell 是一款本地优先、支持 AI 辅助运维的服务器管理工具，将 SSH 终端、远程文件管理、服务器监控和批量操作整合在同一个工作台中，支持 macOS 与 Windows。
 
 无需注册即可管理服务器。服务器密码和私钥口令仅保存在本机，不参与云同步；AI 生成的命令通过本地执行策略运行，支持逐条确认、高危命令确认和完全自动执行三种模式。

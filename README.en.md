@@ -2,6 +2,8 @@
 
 **[中文](README.md) · English**
 
+**[Download the latest release](https://github.com/guoyunfeng2023/sparrowshell/releases/latest)** · macOS (Apple Silicon) / Windows 10/11 x64
+
 SparrowShell is a local-first server management tool with AI-assisted operations. It brings an SSH terminal, remote file management, server monitoring, and batch operations into one workspace, with support for macOS and Windows.
 
 You can manage servers without creating an account. Server passwords and private-key passphrases remain on the local device and are never synchronized to the cloud. AI-generated commands run through a local execution policy with three modes: confirm every command, confirm high-risk commands only, or run all commands automatically.
