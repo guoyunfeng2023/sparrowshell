@@ -1,0 +1,5 @@
+# 通义千问应用配置。复制为 application.properties 后填写，真实配置文件不会提交到 Git。
+# Qwen application settings. Copy to application.properties and fill in your own values.
+sparrowshell.qwen.api-key=
+sparrowshell.qwen.app-id=
+sparrowshell.qwen.model=qwen3.8-flash

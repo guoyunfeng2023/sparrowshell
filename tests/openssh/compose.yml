@@ -1,0 +1,12 @@
+services:
+  openssh:
+    build: .
+    container_name: sparrowshell-openssh-integration
+    ports:
+      - "127.0.0.1:2222:22"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "22"]
+      interval: 1s
+      timeout: 2s
+      retries: 30
+    restart: "no"

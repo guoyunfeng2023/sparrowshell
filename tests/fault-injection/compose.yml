@@ -1,0 +1,7 @@
+services:
+  openssh:
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    security_opt:
+      - no-new-privileges:true

@@ -1,0 +1,4 @@
+# Never send real environment files to the Docker build context
+*.env
+*.env.*
+!*.env.example

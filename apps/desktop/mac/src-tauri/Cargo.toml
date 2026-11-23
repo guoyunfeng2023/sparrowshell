@@ -1,0 +1,35 @@
+[package]
+name = "sparrowshell-desktop"
+version = "1.0.11"
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "sparrowshell_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["macos-private-api"] }
+tauri-plugin-opener = "2"
+tauri-plugin-dialog = "2"
+objc2-app-kit = { version = "0.3.2", features = ["NSPasteboard"] }
+sparrowshell-domain.workspace = true
+sparrowshell-storage.workspace = true
+sparrowshell-secrets.workspace = true
+sparrowshell-ssh-core = { path = "../crates/ssh-core" }
+sparrowshell-monitor = { path = "../crates/monitor" }
+sparrowshell-sftp-core = { path = "../crates/sftp-core" }
+sparrowshell-execution = { path = "../crates/execution" }
+sparrowshell-ai-client = { path = "../crates/ai-client" }
+sparrowshell-sync = { path = "../crates/sync" }
+sparrowshell-automation = { path = "../crates/automation" }
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+zeroize.workspace = true

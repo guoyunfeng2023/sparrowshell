@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SparrowShell · AI 会员</title>
+  <style>
+    :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;color:#17212b;background:#f4f6f8}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}.card{width:min(500px,100%);background:#fff;border:1px solid #e3e8ed;border-radius:20px;padding:28px;box-shadow:0 18px 50px #1b2b3a12}.brand{display:flex;align-items:center;gap:10px;color:#1677ff;font-weight:700;font-size:18px}.mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#eaf3ff}.summary{display:flex;justify-content:space-between;align-items:end;margin:25px 0 20px;padding-bottom:20px;border-bottom:1px solid #edf0f2}.summary h1{font-size:22px;margin:0 0 6px}.summary p{margin:0;color:#6a7682;font-size:13px}.price{font-size:28px;font-weight:700}.price small{font-size:13px;color:#6a7682;font-weight:400}.pay{display:flex;flex-direction:column;align-items:center}.qr{width:240px;height:240px;object-fit:contain;border:1px solid #e5e9ed;border-radius:12px;background:white}.alipay-mark{width:72px;height:72px;display:grid;place-items:center;border-radius:20px;background:#eaf3ff;color:#1677ff;font-size:30px;font-weight:750;margin:8px 0 18px}.status{margin:16px 0 4px;text-align:center;line-height:1.65;color:#536170;font-size:14px}.count{font-variant-numeric:tabular-nums;color:#1677ff}.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}button,.button{border:1px solid #d9e0e6;border-radius:8px;background:#fff;color:#344250;padding:9px 14px;font:inherit;font-size:13px;cursor:pointer;text-decoration:none}button:hover,.button:hover{border-color:#1677ff;color:#1677ff}button.primary,.button.primary{background:#1677ff;border-color:#1677ff;color:#fff}button:disabled{opacity:.5;cursor:not-allowed}.license{display:none;margin-top:20px;padding:18px;border-radius:12px;background:#f0f9f2;border:1px solid #cce8d4}.license.show{display:block}.license h2{font-size:17px;color:#17733a;margin:0 0 8px}.license p{font-size:13px;line-height:1.65;color:#4d6355}.license-key{display:block;margin:12px 0;padding:12px;background:#fff;border-radius:8px;font:12px/1.7 ui-monospace,monospace;word-break:break-all;user-select:all}.note{margin:20px 0 0;color:#7a858f;font-size:12px;line-height:1.7;text-align:center}.mock-note{margin-top:12px;color:#b25d09;font-size:12px}.hidden{display:none!important}@media(max-width:520px){body{padding:12px}.card{padding:20px}.qr{width:220px;height:220px}}
+  </style>
+</head>
+<body>
+<main class="card">
+  <div class="brand"><span class="mark">S</span>SparrowShell</div>
+  <div class="summary"><div><h1 id="plan">AI 会员</h1><p id="subtitle">支付宝支付 · 一个计费周期</p></div><div class="price"><span id="amount">—</span><small> 元</small></div></div>
+  <section id="pending" class="pay">
+    <div id="alipayMark" class="alipay-mark hidden">支</div>
+    <img id="qr" class="qr hidden" alt="支付宝支付二维码">
+    <p id="status" class="status">正在准备订单…</p>
+    <div class="actions">
+      <a id="openAlipay" class="button primary hidden" href="#" target="_blank" rel="noopener noreferrer">新页签打开支付宝收银台</a>
+      <button id="refresh" class="hidden">刷新二维码</button>
+      <button id="query">我已完成支付</button>
+      <a id="mock" class="button hidden" href="#">开发环境模拟支付</a>
+    </div>
+    <p id="mockNote" class="mock-note hidden">开发环境模拟支付，不会发生真实扣款。</p>
+  </section>
+  <section id="license" class="license"><h2 id="successTitle">支付成功</h2><p id="successText">请复制许可证并回到 SparrowShell 客户端激活。许可证与账号无关，请妥善保存。</p><code id="licenseKey" class="license-key"></code><button id="copy" class="primary">复制许可证</button></section>
+  <p id="note" class="note">支付结果以支付宝异步通知和后台查单为准，浏览器返回不会直接发放额度。</p>
+</main>
+<script>
+const token=location.pathname.split('/').filter(Boolean).pop();
+const base=`../orders/${token}`;
+const en=navigator.language.toLowerCase().startsWith('en');
+const text=en?{personal:'Personal',high:'High usage',subtitle:'Alipay · one billing cycle',preparing:'Preparing your order…',waiting:'Complete payment in the new Alipay tab, then return here. This page checks the result automatically and shows your license after confirmation.',open:'Open Alipay checkout in a new tab',query:'I have paid',checking:'Checking payment…',success:'Payment successful',copy:'Copy license',copied:'Copied. Return to SparrowShell to activate.',expired:'This order has expired. Return to SparrowShell and create a new order.',failed:'Payment is not confirmed yet. If you have paid, wait a moment and try again.',refresh:'Refresh QR',mock:'Development mock payment',mockNote:'Development mock payment. No real charge will occur.',mockWaiting:'Scan the development QR or use mock payment.',note:'Payment is confirmed by Alipay notification and server query. Returning to this page alone never grants quota.'}:{personal:'个人版',high:'高频版',subtitle:'支付宝支付 · 一个计费周期',preparing:'正在准备订单…',waiting:'请在新打开的支付宝页签中完成支付，然后回到本页。本页会自动确认到账并展示激活码。',open:'新页签打开支付宝收银台',query:'我已完成支付',checking:'正在确认支付结果…',success:'支付成功',copy:'复制许可证',copied:'已复制，请返回 SparrowShell 客户端激活。',expired:'订单已过期，请返回 SparrowShell 重新下单。',failed:'暂未确认到账；如已付款，请稍后重试。',refresh:'刷新二维码',mock:'开发环境模拟支付',mockNote:'开发环境模拟支付，不会发生真实扣款。',mockWaiting:'请扫描开发二维码，或使用模拟支付。',note:'支付结果以支付宝异步通知和后台查单为准，浏览器返回不会直接发放额度。'};
+let order=null,timer=null,querying=false;
+const $=id=>document.getElementById(id);
+$('note').textContent=text.note;$('refresh').textContent=text.refresh;$('query').textContent=text.query;$('copy').textContent=text.copy;$('status').textContent=text.preparing;$('openAlipay').textContent=text.open;$('mockNote').textContent=text.mockNote;
+function fmtTime(iso){if(!iso)return'--:--';const seconds=Math.max(0,Math.floor((new Date(iso).getTime()-Date.now())/1000));return`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`}
+function render(){
+  if(!order)return;
+  $('plan').textContent=text[order.plan]||order.plan;$('subtitle').textContent=text.subtitle;$('amount').textContent=order.amount;
+  if(order.status==='paid'){
+    clearInterval(timer);$('pending').classList.add('hidden');$('license').classList.add('show');$('successTitle').textContent=text.success;
+    $('successText').textContent=en?'Copy this license and activate it in SparrowShell. It is independent of your account; keep it safe.':'请复制许可证并回到 SparrowShell 客户端激活。许可证与账号无关，请妥善保存。';
+    $('licenseKey').textContent=order.licenseKey||'';return;
+  }
+  if(order.status==='expired'){$('status').textContent=text.expired;$('qr').classList.add('hidden');$('alipayMark').classList.add('hidden');$('openAlipay').classList.add('hidden');$('refresh').classList.add('hidden');$('query').classList.add('hidden');$('mock').classList.add('hidden');return}
+  if(order.mock){
+    $('alipayMark').classList.add('hidden');$('openAlipay').classList.add('hidden');$('refresh').classList.remove('hidden');$('mockNote').classList.remove('hidden');
+    if(order.qrContent){$('qr').src=`data:image/png;base64,${order.qrImage}`;$('qr').classList.remove('hidden')}
+    $('status').textContent=`${text.mockWaiting} · ${fmtTime(order.qrExpiresAt)}`;$('mock').classList.remove('hidden');$('mock').textContent=text.mock;$('mock').href=`${base}/mock-pay`;
+  }else{
+    $('qr').classList.add('hidden');$('refresh').classList.add('hidden');$('mock').classList.add('hidden');$('mockNote').classList.add('hidden');$('alipayMark').classList.remove('hidden');$('openAlipay').classList.remove('hidden');$('openAlipay').href=order.paymentUrl;
+    $('status').textContent=text.waiting;
+  }
+}
+async function request(path='',method='GET'){const response=await fetch(base+path,{method,headers:{Accept:'application/json'}});const data=await response.json();if(!response.ok)throw new Error(data.message||text.failed);return data}
+async function load(withQr=false){try{order=await request();if(order.status==='pending'&&order.mock&&withQr){const data=await request('/alipay-qr','POST');const image=await fetch(`${base}/qr.png`).then(response=>response.blob()).then(blob=>new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.readAsDataURL(blob)}));order={...data,qrImage:image}}render()}catch(error){$('status').textContent=error.message}}
+async function query(){
+  if(querying||!order||order.status!=='pending')return;querying=true;const button=$('query');button.disabled=true;button.textContent=text.checking;
+  try{order=await request('/query','POST');if(order.status!=='paid')order=await request();render();if(order.status!=='paid')$('status').textContent=text.failed}catch(error){$('status').textContent=error.message}finally{querying=false;button.disabled=false;button.textContent=text.query}
+}
+$('refresh').onclick=()=>load(true);$('query').onclick=query;$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(order.licenseKey);$('copy').textContent=text.copied}catch(e){$('copy').textContent=en?'Select and copy the key above':'请手动选中上方许可证复制'}};
+setInterval(()=>{if(order&&order.status==='pending'&&order.mock)render()},1000);setInterval(()=>{void query()},5000);void load(true);
+</script>
+</body>
+</html>

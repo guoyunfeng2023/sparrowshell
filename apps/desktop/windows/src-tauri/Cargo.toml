@@ -1,0 +1,38 @@
+[package]
+name = "sparrowshell-desktop"
+version = "1.0.16"
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "sparrowshell_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+serde_json.workspace = true
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+tauri-plugin-dialog = "2"
+arboard = "3"
+sparrowshell-domain.workspace = true
+sparrowshell-storage.workspace = true
+sparrowshell-secrets.workspace = true
+sparrowshell-ssh-core = { path = "../crates/ssh-core" }
+sparrowshell-monitor = { path = "../crates/monitor" }
+sparrowshell-sftp-core = { path = "../crates/sftp-core" }
+sparrowshell-execution = { path = "../crates/execution" }
+sparrowshell-ai-client = { path = "../crates/ai-client" }
+sparrowshell-sync = { path = "../crates/sync" }
+sparrowshell-automation = { path = "../crates/automation" }
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+zeroize.workspace = true
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+sha2 = "0.10"

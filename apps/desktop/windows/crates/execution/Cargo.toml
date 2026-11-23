@@ -1,0 +1,15 @@
+[package]
+name = "sparrowshell-execution"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+sparrowshell-domain.workspace = true
+async-trait.workspace = true
+chrono.workspace = true
+serde.workspace = true
+sha2 = "0.10"
+thiserror.workspace = true
+tokio.workspace = true
+uuid.workspace = true

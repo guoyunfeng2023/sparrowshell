@@ -1,0 +1,23 @@
+[package]
+name = "sparrowshell-ssh-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+sparrowshell-domain.workspace = true
+sparrowshell-storage.workspace = true
+sparrowshell-secrets.workspace = true
+sparrowshell-monitor = { path = "../monitor" }
+sparrowshell-sftp-core = { path = "../sftp-core" }
+sparrowshell-execution = { path = "../execution" }
+russh-sftp = "3.0.1"
+async-trait.workspace = true
+chrono.workspace = true
+russh = "0.65"
+tokio.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
+uuid.workspace = true
+serde.workspace = true
+serde_json.workspace = true
