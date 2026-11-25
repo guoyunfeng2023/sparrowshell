@@ -406,7 +406,7 @@ export default function App() {
   const removeFolder = async (folder: FolderRecord, confirmed = false) => {
     setFolderMenu(null);
     const impact = folderDeletionImpact(catalog, folder.id);
-    if (impact.serverCount > 0 && !confirmed) {
+    if (!confirmed) {
       setCatalogDeleteTarget({ kind: 'folder', folder, subfolderCount: impact.subfolderCount, serverCount: impact.serverCount });
       return;
     }

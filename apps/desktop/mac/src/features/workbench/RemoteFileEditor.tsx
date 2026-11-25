@@ -9,6 +9,7 @@ import { FileText, RefreshCw, Save, Search, X } from 'lucide-react';
 import { desktop } from '../../ipc/client';
 import type { Locale, MessageKey } from '../../i18n';
 import { remoteEditorLanguageDescription } from './remoteEditorLanguage';
+import type { RemoteEditorLanguageChoice } from './remoteEditorLanguage';
 import { remoteEditorSearchExtensions } from './remoteEditorSearch';
 import { remoteEditorLightHighlighting } from './remoteEditorTheme';
 import { remoteFileError } from './remoteFileUtils';
@@ -35,6 +36,7 @@ export function RemoteFileEditor({ sessionId, generation, path, theme, locale, f
   const [savedNotice, setSavedNotice] = useState(false);
   const [error, setError] = useState('');
   const [language, setLanguage] = useState<LanguageSupport | null>(null);
+  const [languageChoice, setLanguageChoice] = useState<RemoteEditorLanguageChoice>('auto');
   const request = useRef(0);
   const editor = useRef<ReactCodeMirrorRef>(null);
   const translate = useRef(t);
@@ -52,9 +54,13 @@ export function RemoteFileEditor({ sessionId, generation, path, theme, locale, f
   } as CSSProperties;
 
   useEffect(() => {
+    setLanguageChoice('auto');
+  }, [path]);
+
+  useEffect(() => {
     let cancelled = false;
     setLanguage(null);
-    const description = remoteEditorLanguageDescription(path);
+    const description = remoteEditorLanguageDescription(path, languageChoice);
     if (!description) return () => { cancelled = true; };
     void description.load().then((support) => {
       if (!cancelled) setLanguage(support);
@@ -62,7 +68,7 @@ export function RemoteFileEditor({ sessionId, generation, path, theme, locale, f
       // An unavailable parser should never prevent editing the remote text.
     });
     return () => { cancelled = true; };
-  }, [path]);
+  }, [path, languageChoice]);
 
   const readFile = useCallback(async () => {
     const id = ++request.current;
@@ -148,6 +154,16 @@ export function RemoteFileEditor({ sessionId, generation, path, theme, locale, f
       <div className="remote-editor-path"><code title={path}>{path}</code></div>
       <div className="remote-editor-toolbar">
         <span>{t('remoteEditorHint')}</span>
+        <label className="remote-editor-language">{t('remoteEditorLanguage')}<select aria-label={t('remoteEditorLanguage')} value={languageChoice} onChange={(event) => setLanguageChoice(event.target.value as RemoteEditorLanguageChoice)}>
+          <option value="auto">{t('remoteEditorLanguageAuto')}</option>
+          <option value="nginx">Nginx</option>
+          <option value="properties">Properties</option>
+          <option value="dotenv">Dotenv</option>
+          <option value="shell">Shell</option>
+          <option value="json">JSON</option>
+          <option value="yaml">YAML</option>
+          <option value="plain">{t('remoteEditorPlainText')}</option>
+        </select></label>
         <div><button className="button secondary small" disabled={loading || saving || !loaded} onClick={openSearch}><Search size={12} />{t('remoteEditorSearchReplace')}</button><button className="button secondary small" disabled={loading || saving} onClick={reload}><RefreshCw size={12} className={loading ? 'spin' : ''} />{t('reloadRemoteFile')}</button><button className="button primary small" disabled={loading || saving || !loaded || !dirty} onClick={() => void save()}><Save size={12} />{saving ? t('savingRemoteFile') : t('save')}</button></div>
       </div>
       {error && <div className="ops-error remote-editor-error" role="alert">{error}</div>}

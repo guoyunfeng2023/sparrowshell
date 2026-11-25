@@ -20,6 +20,8 @@ describe('remote editor language detection', () => {
     ['/opt/app/app.properties', 'Properties files'],
     ['/opt/app/app.ini', 'Properties files'],
     ['/etc/nginx/nginx.conf', 'Nginx'],
+    ['/etc/nginx/conf.d/default.conf', 'Nginx'],
+    ['/etc/nginx/sites-enabled/app.conf', 'Nginx'],
     ['/etc/redis/redis.conf', 'Properties files'],
   ])('detects %s as %s', (path, language) => {
     expect(remoteEditorLanguageDescription(path)?.name).toBe(language);
@@ -36,6 +38,20 @@ describe('remote editor language detection', () => {
     const description = remoteEditorLanguageDescription('/opt/app/.env');
     const support = await description!.load();
     expect(support.language.name).toBe('dotenv');
+  });
+
+  it('loads the dedicated Nginx parser', async () => {
+    const description = remoteEditorLanguageDescription('/etc/nginx/nginx.conf');
+    const support = await description!.load();
+    expect(support.language.name).toBe('nginx');
+  });
+
+  it('allows manual language selection and plain text', async () => {
+    const description = remoteEditorLanguageDescription('/etc/redis/redis.conf', 'nginx');
+    expect(description?.name).toBe('Nginx');
+    expect((await description!.load()).language.name).toBe('nginx');
+    expect(remoteEditorLanguageDescription('/etc/nginx/nginx.conf', 'plain')).toBeNull();
+    expect(remoteEditorLanguageDescription('/opt/app/unknown.custom', 'json')?.name).toBe('JSON');
   });
 
   it('falls back to plain text for unknown extensions and extensionless files', () => {

@@ -9,13 +9,13 @@ const server = (id: string, folderId: string | null): ServerRecord => ({
 const catalog = (folders: Folder[], servers: ServerRecord[]): CatalogSnapshot => ({ folders, servers });
 
 describe('folder deletion impact', () => {
-  it('allows an empty folder to be deleted without confirmation', () => {
+  it('calculates zero impact for an empty folder', () => {
     const impact = folderDeletionImpact(catalog([folder('empty')], []), 'empty');
     expect(impact.serverCount).toBe(0);
     expect(impact.subfolderCount).toBe(0);
   });
 
-  it('does not require confirmation for nested folders without servers', () => {
+  it('calculates nested folders even when they contain no servers', () => {
     const impact = folderDeletionImpact(catalog([folder('parent'), folder('child', 'parent'), folder('grandchild', 'child')], []), 'parent');
     expect(impact.serverCount).toBe(0);
     expect(impact.subfolderCount).toBe(2);
